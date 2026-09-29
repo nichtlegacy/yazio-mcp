@@ -1,20 +1,19 @@
 {
-  "name": "yazio-mcp",
-  "version": "0.0.14",
-  "description": "MCP server for accessing Yazio user & nutrition data (unofficial)",
-  "mcpName": "io.github.fliptheweb/yazio-mcp",
-  "author": "fliptheweb",
+  "name": "@nichtlegacy/yazio-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for your YAZIO diary, nutrition, body values and exercises (unofficial)",
+  "mcpName": "io.github.nichtlegacy/yazio-mcp",
+  "author": "nichtlegacy (fork of fliptheweb/yazio-mcp)",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fliptheweb/yazio-mcp.git"
+    "url": "git+https://github.com/nichtlegacy/yazio-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/fliptheweb/yazio-mcp/issues"
+    "url": "https://github.com/nichtlegacy/yazio-mcp/issues"
   },
-  "homepage": "https://github.com/fliptheweb/yazio-mcp#readme",
+  "homepage": "https://github.com/nichtlegacy/yazio-mcp#readme",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "type": "module",
   "bin": {
     "yazio-mcp": "dist/index.js"
@@ -25,18 +24,20 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc --emitDeclarationOnly && esbuild src/index.ts --bundle --platform=node --format=esm --packages=bundle --outfile=dist/index.js",
+    "build": "rm -rf dist && esbuild src/index.ts --bundle --platform=node --target=node20 --format=esm --packages=bundle --outfile=dist/index.js",
     "pack:mcpb": "node scripts/pack-mcpb.cjs",
     "build:mcpb": "npm run build && npm run pack:mcpb",
     "build:mcpb:unpacked": "npm run build && node scripts/pack-mcpb.cjs --unpacked",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
     "prepublishOnly": "npm run build",
-    "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint src/**/*.ts --fix",
-    "format": "prettier --write src/**/*.ts",
+    "lint": "eslint src test",
+    "lint:fix": "eslint src test --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "type-check": "tsc --noEmit",
-    "version": "node scripts/bump-version.cjs && git add manifest.json server.json"
+    "version": "node scripts/bump-version.cjs && git add manifest.json server.json",
+    "test": "node --import tsx --test test/*.test.ts",
+    "test:e2e": "npm run build && tsx test/e2e.ts"
   },
   "keywords": [
     "mcp",
@@ -45,26 +46,28 @@
     "diet",
     "model-context-protocol",
     "health",
-    "fitness"
+    "fitness",
+    "calories",
+    "food-diary"
   ],
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {},
   "devDependencies": {
     "@anthropic-ai/mcpb": "^2.1.2",
-    "@modelcontextprotocol/sdk": "^1.25.0",
-    "@types/node": "^20.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.44.1",
-    "@typescript-eslint/parser": "^8.44.1",
-    "esbuild": "^0.28.0",
-    "eslint": "^9.36.0",
-    "globals": "^16.4.0",
-    "prettier": "^3.6.2",
-    "tsx": "^4.0.0",
-    "typescript": "^5.0.0",
-    "uuid": "^13.0.0",
-    "yazio": "^1.0.0",
-    "zod": "^4.2.1"
+    "@eslint/js": "^10.0.1",
+    "@modelcontextprotocol/client": "^2.2.0",
+    "@modelcontextprotocol/server": "^2.2.0",
+    "@types/node": "^20.19.43",
+    "@typescript-eslint/eslint-plugin": "^8.71.0",
+    "@typescript-eslint/parser": "^8.71.0",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.9",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3",
+    "zod": "^4.6.5"
   }
 }

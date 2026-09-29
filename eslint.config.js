@@ -6,7 +6,7 @@ import globals from 'globals';
 export default [
   js.configs.recommended,
   {
-    files: ['src/**/*.ts'],
+    files: ['src/**/*.ts', 'test/**/*.ts'],
     languageOptions: {
       parser: tsparser,
       parserOptions: {
@@ -21,6 +21,9 @@ export default [
       '@typescript-eslint': tseslint,
     },
     rules: {
+      // TypeScript checks these itself; the core rules misread type-only syntax.
+      'no-unused-vars': 'off',
+      'no-undef': 'off',
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off', // Too strict for this project
