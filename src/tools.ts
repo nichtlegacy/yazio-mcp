@@ -206,7 +206,7 @@ export function registerTools(server: McpServer, yazio: YazioClient): void {
     },
     async () => {
       const [user, settings, dietary_preferences] = await Promise.all([
-        getUser(),
+        yazio.get<User>('/user'),
         yazio.get('/user/settings'),
         yazio.get('/user/dietary-preferences'),
       ]);

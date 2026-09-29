@@ -1,5 +1,6 @@
 // Drives the real MCP server through an in-memory MCP client against a fake YAZIO API.
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { Client } from '@modelcontextprotocol/client';
 import { InMemoryTransport, McpServer } from '@modelcontextprotocol/server';
@@ -106,6 +107,15 @@ test('tools: list and profile privacy', async () => {
   for (const tool of tools) {
     assert.ok(tool.description && tool.annotations, `${tool.name} has description and annotations`);
   }
+  const manifest = JSON.parse(readFileSync('manifest.json', 'utf8')) as {
+    tools: { name: string }[];
+  };
+  assert.deepEqual(
+    manifest.tools.map((t) => t.name),
+    tools.map((t) => t.name),
+    'manifest.json lists exactly the registered tools'
+  );
+
   const { data } = await call('get_profile');
   assert.equal(data.profile.first_name, 'Jan');
   assert.equal(data.profile.email, undefined);

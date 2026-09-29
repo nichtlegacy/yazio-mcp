@@ -2,7 +2,6 @@
   "name": "@nichtlegacy/yazio-mcp",
   "version": "1.0.0",
   "description": "MCP server for your YAZIO diary, nutrition, body values and exercises (unofficial)",
-  "mcpName": "io.github.nichtlegacy/yazio-mcp",
   "author": "nichtlegacy (fork of fliptheweb/yazio-mcp)",
   "license": "MIT",
   "repository": {
@@ -35,7 +34,7 @@
     "lint:fix": "eslint src test --fix",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "type-check": "tsc --noEmit",
-    "version": "node scripts/bump-version.cjs && git add manifest.json server.json",
+    "version": "node scripts/bump-version.cjs && git add manifest.json",
     "test": "node --import tsx --test test/*.test.ts",
     "test:e2e": "npm run build && tsx test/e2e.ts"
   },

@@ -1,17 +1,20 @@
 {
   "manifest_version": "0.3",
   "name": "yazio-mcp",
-  "version": "0.0.14",
-  "description": "MCP server for accessing Yazio user & nutrition data (unofficial)",
+  "version": "1.0.0",
+  "description": "Read and write your YAZIO food diary, nutrition history, body values, exercises and water (unofficial)",
   "author": {
-    "name": "fliptheweb"
+    "name": "nichtlegacy",
+    "url": "https://github.com/nichtlegacy"
   },
   "server": {
     "type": "node",
     "entry_point": "server/index.js",
     "mcp_config": {
       "command": "node",
-      "args": ["server/index.js"],
+      "args": [
+        "server/index.js"
+      ],
       "env": {
         "YAZIO_USERNAME": "${user_config.YAZIO_USERNAME}",
         "YAZIO_PASSWORD": "${user_config.YAZIO_PASSWORD}"
@@ -19,18 +22,106 @@
     }
   },
   "tools": [
-    { "name": "get_user_daily_summary", "description": "Get daily nutrition summary" },
-    { "name": "get_user_consumed_items", "description": "Get food entries for a date" },
-    { "name": "get_user_weight", "description": "Get weight data" },
-    { "name": "get_user_exercises", "description": "Get exercise data" },
-    { "name": "get_user_water_intake", "description": "Get water intake" },
-    { "name": "get_user_goals", "description": "Get nutrition goals" },
-    { "name": "get_user_settings", "description": "Get user preferences" },
-    { "name": "search_products", "description": "Search food database" },
-    { "name": "get_product", "description": "Get detailed product info" },
-    { "name": "add_user_consumed_item", "description": "Add food to your log" },
-    { "name": "add_user_water_intake", "description": "Add water intake entry" },
-    { "name": "remove_user_consumed_item", "description": "Remove food from log" }
+    {
+      "name": "get_profile",
+      "description": "Get profile"
+    },
+    {
+      "name": "get_diary",
+      "description": "Get food diary"
+    },
+    {
+      "name": "get_daily_summary",
+      "description": "Get daily summary"
+    },
+    {
+      "name": "get_goals",
+      "description": "Get goals"
+    },
+    {
+      "name": "get_nutrition_history",
+      "description": "Get nutrition history"
+    },
+    {
+      "name": "add_food_entry",
+      "description": "Log food"
+    },
+    {
+      "name": "add_quick_entry",
+      "description": "Quick-log calories"
+    },
+    {
+      "name": "add_recipe_entry",
+      "description": "Log recipe portions"
+    },
+    {
+      "name": "remove_diary_entry",
+      "description": "Remove diary entry"
+    },
+    {
+      "name": "get_water_intake",
+      "description": "Get water intake"
+    },
+    {
+      "name": "add_water",
+      "description": "Log water"
+    },
+    {
+      "name": "get_exercises",
+      "description": "Get exercises"
+    },
+    {
+      "name": "add_exercise",
+      "description": "Log exercise"
+    },
+    {
+      "name": "remove_exercise",
+      "description": "Remove exercise"
+    },
+    {
+      "name": "get_body_values",
+      "description": "Get body values"
+    },
+    {
+      "name": "get_body_value_history",
+      "description": "Get body value history"
+    },
+    {
+      "name": "add_body_value",
+      "description": "Log body value"
+    },
+    {
+      "name": "remove_body_value",
+      "description": "Remove body value"
+    },
+    {
+      "name": "get_streak",
+      "description": "Get streak"
+    },
+    {
+      "name": "search_products",
+      "description": "Search products"
+    },
+    {
+      "name": "get_product",
+      "description": "Get product"
+    },
+    {
+      "name": "get_suggested_products",
+      "description": "Get suggested products"
+    },
+    {
+      "name": "search_recipes",
+      "description": "Search recipes"
+    },
+    {
+      "name": "get_my_recipes",
+      "description": "Get my recipes"
+    },
+    {
+      "name": "get_recipe",
+      "description": "Get recipe"
+    }
   ],
   "user_config": {
     "YAZIO_USERNAME": {
@@ -46,6 +137,17 @@
       "type": "string",
       "required": true,
       "sensitive": true
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nichtlegacy/yazio-mcp"
+  },
+  "homepage": "https://github.com/nichtlegacy/yazio-mcp",
+  "license": "MIT",
+  "compatibility": {
+    "runtimes": {
+      "node": ">=20.0.0"
     }
   }
 }
