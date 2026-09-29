@@ -1,11 +1,12 @@
 #!/usr/bin/env node
-import { createRequire } from 'node:module';
 import { McpServer } from '@modelcontextprotocol/server';
 import { StdioServerTransport } from '@modelcontextprotocol/server/stdio';
 import { registerTools } from './tools.js';
 import { YazioClient } from './yazio.js';
+// Inlined by esbuild, so the bundle runs without package.json next to it.
+import pkg from '../package.json' with { type: 'json' };
 
-const { version } = createRequire(import.meta.url)('../package.json') as { version: string };
+const { version } = pkg;
 
 const username = process.env.YAZIO_USERNAME ?? process.env.YAZIO_EMAIL;
 const password = process.env.YAZIO_PASSWORD;

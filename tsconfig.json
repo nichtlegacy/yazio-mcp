@@ -5,6 +5,7 @@
     "moduleResolution": "bundler",
     "types": ["node"],
     "strict": true,
+    "resolveJsonModule": true,
     "noEmit": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
