@@ -600,7 +600,8 @@ export function registerTools(server: McpServer, yazio: YazioClient): void {
       annotations: DELETE,
     },
     async ({ id }) => {
-      await yazio.delete(`/user/exercises/${id}`);
+      // Covers standard and custom trainings; DELETE /user/exercises/{id} does not exist.
+      await yazio.delete('/user/exercises/trainings', [id]);
       return json({ removed: true, id });
     }
   );
@@ -798,12 +799,42 @@ export function registerTools(server: McpServer, yazio: YazioClient): void {
     {
       title: 'Get suggested products',
       description:
-        'Products YAZIO suggests for a meal, based on what the user usually eats at that time.',
-      inputSchema: z.object({ daytime: Daytime, date: DateArg }),
+        'Products YAZIO suggests for a meal, based on what the user usually eats at that time, ' +
+        'with the usual amount. Ready to use with add_food_entry.',
+      inputSchema: z.object({
+        daytime: Daytime,
+        date: DateArg,
+        limit: z.number().int().min(1).max(30).default(10),
+      }),
       annotations: READ,
     },
-    async ({ daytime, date = today() }) =>
-      json(await yazio.get('/user/products/suggested', { date, daytime }))
+    async ({ daytime, date = today(), limit }) => {
+      const suggestions = await yazio.get<
+        {
+          product_id: string;
+          amount: number;
+          serving: string | null;
+          serving_quantity: number | null;
+        }[]
+      >('/user/products/suggested', { date, daytime });
+      return json(
+        await Promise.all(
+          suggestions.slice(0, limit).map(async (s) => {
+            const product = await getProduct(s.product_id);
+            return {
+              product_id: s.product_id,
+              name: product?.name ?? 'Unknown product',
+              producer: product?.producer ?? undefined,
+              amount: s.amount,
+              unit: product?.base_unit,
+              serving: s.serving ?? undefined,
+              serving_quantity: s.serving_quantity ?? undefined,
+              nutrients: product ? summarize(product.nutrients, s.amount) : null,
+            };
+          })
+        )
+      );
+    }
   );
 
   server.registerTool(

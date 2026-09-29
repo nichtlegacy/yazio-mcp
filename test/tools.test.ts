@@ -68,6 +68,11 @@ async function setup() {
         ]);
       case '/user/water-intake':
         return reply(200, { water_intake: water, gateway: null, source: null });
+      case '/user/products/suggested':
+        return reply(200, [
+          { product_id: PRODUCT, amount: 330, serving: 'glass', serving_quantity: 1 },
+          { product_id: PRODUCT, amount: 660, serving: 'glass', serving_quantity: 2 },
+        ]);
       case '/user/streak':
         return reply(200, { '2026-09-01': { streak_count: 1 }, '2026-09-02': { streak_count: 2 } });
       default:
@@ -191,7 +196,7 @@ test('tools: quick entry, water, exercise, body values', async () => {
   await call('remove_diary_entry', { id });
   assert.deepEqual(deletes, [
     { path: '/user/bodyvalues', body: [id] },
-    { path: `/user/exercises/${id}`, body: undefined },
+    { path: '/user/exercises/trainings', body: [id] },
     { path: '/user/consumed-items', body: [id] },
   ]);
 });
@@ -205,6 +210,19 @@ test('tools: search uses the language market, streak filters days', async () => 
   const streak = await call('get_streak', { start: '2026-09-02', end: '2026-09-30' });
   assert.equal(streak.data.current_streak, 2);
   assert.deepEqual(Object.keys(streak.data.days), ['2026-09-02']);
+
+  const suggested = await call('get_suggested_products', { daytime: 'lunch', limit: 1 });
+  assert.deepEqual(suggested.data, [
+    {
+      product_id: PRODUCT,
+      name: 'Cola Lemon',
+      amount: 330,
+      unit: 'ml',
+      serving: 'glass',
+      serving_quantity: 1,
+      nutrients: { kcal: 66 },
+    },
+  ]);
 
   const bad = await call('get_diary', { date: '29.09.2026' });
   assert.ok(bad.isError);
