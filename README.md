@@ -67,6 +67,18 @@ The project stays deliberately:
 
 ## Quick start
 
+### Let your AI agent install it
+
+Copy this prompt into an agent with local terminal and file access:
+
+```text
+Read https://raw.githubusercontent.com/nichtlegacy/yazio-mcp/master/docs/agent-installation.md and follow it to install, globally configure, and verify yazio-mcp for my AI clients.
+```
+
+[Installation guide](docs/agent-installation.md) · Supports Claude Code, Claude Desktop, Codex, and Cursor.
+
+### Manual installation
+
 Build from source; the fork is not published to npm.
 
 ```bash
@@ -76,16 +88,32 @@ npm ci
 npm run build            # dist/index.js, all dependencies bundled
 ```
 
-Claude Code:
+Then expand the instructions for your client. Replace `/path/to/yazio-mcp` with
+the absolute path to your clone and use your YAZIO account credentials.
+
+<details>
+<summary><strong>Claude Code</strong></summary>
+
+Register globally for your user (omit `--scope user` for a local setup):
 
 ```bash
-claude mcp add yazio \
+claude mcp add --scope user yazio \
   -e YAZIO_USERNAME=you@example.com \
   -e YAZIO_PASSWORD='your-password' \
   -- node /path/to/yazio-mcp/dist/index.js
 ```
 
-Claude Desktop (`claude_desktop_config.json`) or any other MCP client:
+</details>
+
+<details>
+<summary><strong>Claude Desktop</strong></summary>
+
+For a one-click installation, download `yazio-mcp.mcpb` from the
+[latest release](https://github.com/nichtlegacy/yazio-mcp/releases/latest) and
+open it in Claude Desktop. It asks for your email and password during installation.
+To build the bundle yourself, run `npm run build:mcpb`.
+
+Alternatively, add this to `claude_desktop_config.json` and restart Claude Desktop:
 
 ```json
 {
@@ -102,10 +130,69 @@ Claude Desktop (`claude_desktop_config.json`) or any other MCP client:
 }
 ```
 
+</details>
+
+<details>
+<summary><strong>OpenAI Codex (CLI and IDE extension)</strong></summary>
+
+Register the server with the Codex CLI:
+
+```bash
+codex mcp add yazio \
+  --env YAZIO_USERNAME=you@example.com \
+  --env YAZIO_PASSWORD='your-password' \
+  -- node /path/to/yazio-mcp/dist/index.js
+```
+
+Alternatively, add this to `~/.codex/config.toml`. The CLI and Codex IDE extension
+share this configuration:
+
+```toml
+[mcp_servers.yazio]
+command = "node"
+args = ["/path/to/yazio-mcp/dist/index.js"]
+
+[mcp_servers.yazio.env]
+YAZIO_USERNAME = "you@example.com"
+YAZIO_PASSWORD = "your-password"
+```
+
+Start a new Codex session after adding the server. Use `codex mcp list` to check
+that `yazio` is registered.
+
+</details>
+
+<details>
+<summary><strong>Cursor</strong></summary>
+
+Add this to `~/.cursor/mcp.json` for all projects, or `.cursor/mcp.json` in your
+project for a project-specific setup. If the file already contains servers, add
+`yazio` to the existing `mcpServers` object.
+
+```json
+{
+  "mcpServers": {
+    "yazio": {
+      "command": "node",
+      "args": ["/path/to/yazio-mcp/dist/index.js"],
+      "env": {
+        "YAZIO_USERNAME": "you@example.com",
+        "YAZIO_PASSWORD": "your-password"
+      }
+    }
+  }
+}
+```
+
+Open Cursor Settings → Tools & MCP and check that `yazio` is enabled. Keep any
+project configuration containing your credentials out of version control.
+
+</details>
+
 Expected: the client lists 25 `yazio` tools, and "what did I eat yesterday?" returns your diary.
 
-For Claude Desktop there is also a one-click bundle: `npm run build:mcpb` writes
-`yazio-mcp.mcpb`, which asks for email and password on install. Tagged releases attach it.
+Other stdio MCP clients can use the same `command`, `args` and `env` values as
+the JSON examples above.
 
 ## Configuration
 
